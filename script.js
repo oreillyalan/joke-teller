@@ -1,6 +1,7 @@
 const button = document.getElementById('button');
 const audioElement = document.getElementById('audio');
 
+
 // VoiceRSS Javascript SDK
 const VoiceRSS = {
     speech: function(e) {
@@ -45,9 +46,8 @@ const VoiceRSS = {
             if (4 == t.readyState && 200 == t.status) {
                 if (0 == t.responseText.indexOf("ERROR"))
                     throw t.responseText;
-                // new Audio(t.responseText).play();
                 audioElement.src = t.responseText;
-                audioElement.play;
+                audioElement.play()
             }
         }
         ,
@@ -86,33 +86,48 @@ const VoiceRSS = {
     }
 };
 
-var mykey = config.MY_KEY;
+
+// Toggle Joke Button
+
+function toggleButton(){
+    button.disabled = !button.disabled;
+}
 
 
-// function load(){
-//     VoiceRSS.speech({
-//         key: mykey,
-//         src: 'Hello World!',
-//         hl: 'en-us',
-//         v: 'Linda',
-//         r: 0, 
-//         c: 'mp3',
-//         f: '44khz_16bit_stereo',
-//         ssml: false
-//     });
-// }
+// Settings for the text to speech use by VoiceRSS
+function textToSpeechSettings(joke){
+    VoiceRSS.speech({
+        key: config.MY_KEY,
+        src: joke,
+        hl: 'en-us',
+        v: 'Linda',
+        r: 0, 
+        c: 'mp3',
+        f: '44khz_16bit_stereo',
+        ssml: false
+    });
+}
 
-// load();
+
 
 
 // Get Jokes from Joke API
 
 async function getJokes(){
+
+    let joke = '';
     const apiUrl =  `https://sv443.net/jokeapi/v2/joke/Programming?blacklistFlags=nsfw,religious,political,sexist`; 
     try{
         const response = await fetch(apiUrl);
         const data = await response.json();
-        console.log('worked!', data);
+        if (data.setup){
+            joke = `${data.setup} ... ${data.delivery}`;
+        } else {
+            joke = data.joke;
+        }
+        textToSpeechSettings (joke);
+        toggleButton();
+ 
 
     }catch (error){
         // Catch Errors Here
@@ -120,4 +135,7 @@ async function getJokes(){
     }
 };
 
-getJokes();
+
+// Event Listeners
+button.addEventListener('click', getJokes);
+audioElement.addEventListener('ended', toggleButton)
