@@ -1,3 +1,6 @@
+const button = document.getElementById('button');
+const audioElement = document.getElementById('audio');
+
 // VoiceRSS Javascript SDK
 const VoiceRSS = {
     speech: function(e) {
@@ -42,7 +45,9 @@ const VoiceRSS = {
             if (4 == t.readyState && 200 == t.status) {
                 if (0 == t.responseText.indexOf("ERROR"))
                     throw t.responseText;
-                new Audio(t.responseText).play();
+                // new Audio(t.responseText).play();
+                audioElement.src = t.responseText;
+                audioElement.play;
             }
         }
         ,
@@ -81,7 +86,7 @@ const VoiceRSS = {
     }
 };
 
-var mykey = config.MY_KEY; = config.MY_KEY;
+var mykey = config.MY_KEY;
 
 
 function load(){
