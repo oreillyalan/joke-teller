@@ -89,17 +89,35 @@ const VoiceRSS = {
 var mykey = config.MY_KEY;
 
 
-function load(){
-    VoiceRSS.speech({
-        key: mykey,
-        src: 'Hello World!',
-        hl: 'en-us',
-        v: 'Linda',
-        r: 0, 
-        c: 'mp3',
-        f: '44khz_16bit_stereo',
-        ssml: false
-    });
-}
+// function load(){
+//     VoiceRSS.speech({
+//         key: mykey,
+//         src: 'Hello World!',
+//         hl: 'en-us',
+//         v: 'Linda',
+//         r: 0, 
+//         c: 'mp3',
+//         f: '44khz_16bit_stereo',
+//         ssml: false
+//     });
+// }
 
-load();
+// load();
+
+
+// Get Jokes from Joke API
+
+async function getJokes(){
+    const apiUrl =  `https://sv443.net/jokeapi/v2/joke/Programming?blacklistFlags=nsfw,religious,political,sexist`; 
+    try{
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        console.log('worked!', data);
+
+    }catch (error){
+        // Catch Errors Here
+        console.log('Whoops', error);
+    }
+};
+
+getJokes();
